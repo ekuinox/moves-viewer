@@ -96,12 +96,12 @@ export default class Map extends React.Component<{}, IState> {
 	public render() {
 		return (
 			<div>
-				<label style={{color: "white", backgroundColor: "#009688", borderRadius: "5rem"}} >
+				<label style={{color: "red", padding: "0.5rem", backgroundColor: "black", borderRadius: "1rem"}} >
 					storyline.jsonを貼っつけてくれ
 					<input type="file" style={{display: "none"}} onChange={this.fileOnChange} />
       			</label>
-				<p>{this.state.path ? "選択中 => " + this.state.path : "未選択"}</p>
-				<L.Map center={[35, 139]} zoom={13}>
+				<p style={{textDecoration: "underline"}} >{this.state.path ? `選択中[${this.state.path}]` : "未選択"}</p>
+				<L.Map center={[35, 139]} zoom={7}>
 					<L.LayersControl>
 						<L.LayersControl.BaseLayer checked={true} name="Moves Activities">
             				<L.TileLayer url='https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png' />

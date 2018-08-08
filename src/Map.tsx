@@ -72,7 +72,7 @@ interface IMoves {
 }
 
 interface IState {
-	storylineJson: string
+	path: string
 }
 
 export default class Map extends React.Component<{}, IState> {
@@ -88,14 +88,19 @@ export default class Map extends React.Component<{}, IState> {
 
 		this.load = this.load.bind(this)
 		this.fileOnChange = this.fileOnChange.bind(this)
+		this.state = {
+			path: ""
+		}
 	}
 
 	public render() {
 		return (
 			<div>
-				<label style={{color: "white", backgroundColor: "#009688", padding: "5px", borderRadius: "4px"}} >
+				<label style={{color: "white", backgroundColor: "#009688", borderRadius: "5rem"}} >
+					storyline.jsonを貼っつけてくれ
 					<input type="file" style={{display: "none"}} onChange={this.fileOnChange} />
       			</label>
+				<p>{this.state.path ? "選択中 => " + this.state.path : "未選択"}</p>
 				<L.Map center={[35, 139]} zoom={13}>
 					<L.LayersControl>
 						<L.LayersControl.BaseLayer checked={true} name="Moves Activities">
@@ -140,8 +145,8 @@ export default class Map extends React.Component<{}, IState> {
 		)
 	}
 
-	private load() {
-		const storyline: IStoryline[] = JSON.parse(this.state.storylineJson);
+	private load(json: string, jsonPath: string) {
+		const storyline: IStoryline[] = JSON.parse(json);
 
 		if (!storyline) {
 			return;
@@ -178,6 +183,7 @@ export default class Map extends React.Component<{}, IState> {
 				}
 			}
 		}
+		this.setState({path: jsonPath})
 	}
 
 	private fileOnChange(e: any) {
@@ -187,8 +193,7 @@ export default class Map extends React.Component<{}, IState> {
 			const reader = new FileReader()
 			reader.readAsText(file)
 			reader.onload = () => {
-				this.setState({storylineJson: reader.result as string})
-				this.load()
+				this.load(reader.result as string, file.name)
 			}
 		}
 	}
